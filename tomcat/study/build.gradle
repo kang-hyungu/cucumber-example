@@ -1,0 +1,30 @@
+plugins {
+    id "java"
+}
+
+group "nextstep"
+version "1.0-SNAPSHOT"
+
+sourceCompatibility = JavaVersion.VERSION_19
+targetCompatibility = JavaVersion.VERSION_19
+
+repositories {
+    mavenCentral()
+}
+
+// gradle/libs.versions.toml
+dependencies {
+    implementation libs.reflections
+    implementation libs.logback
+    implementation libs.commons.lang3
+
+    testImplementation libs.assertj
+    testImplementation libs.mockito
+    testImplementation libs.bundles.junit
+    testImplementation libs.bundles.cucumber
+}
+
+test {
+    maxParallelForks 3
+    useJUnitPlatform()
+}

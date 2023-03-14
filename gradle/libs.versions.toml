@@ -1,0 +1,48 @@
+# https://docs.gradle.org/current/userguide/platforms.html#sub:conventional-dependencies-toml
+[versions]
+junit = "5.8.1"
+spring = "6.0.4"
+tomcat = "10.1.5"
+lombok = "1.18.26"
+assertj = "3.24.2"
+logback = "1.2.10"
+mockito = "3.+"
+jackson = "2.14.2"
+servlet = "5.0.0"
+servlet-jsp = "3.0.0"
+aws-cdk = "2.68.0"
+cucumber = "7.11.0"
+commons-lang3 = "3.12.0"
+reflections = "0.10.2"
+annotation = "2.1.1"
+validation = "3.0.2"
+
+[libraries]
+# = { module = "", version.ref = "" }
+assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+jackson = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+tomcat = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcat" }
+jasper = { module = "org.apache.tomcat.embed:tomcat-embed-jasper", version.ref = "tomcat" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+aws-cdk = { module = "software.amazon.awscdk:aws-cdk-lib", version.ref = "aws-cdk" }
+annotation = { module = "jakarta.annotation:jakarta.annotation-api", version.ref = "annotation" }
+validation = { module = "jakarta.validation:jakarta.validation-api", version.ref = "validation" }
+reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3" }
+#cucumber-java = { module = "io.cucumber:cucumber-java", version.ref = "cucumber" }
+cucumber-java8 = { module = "io.cucumber:cucumber-java8", version.ref = "cucumber" }
+cucumber-junit = { module = "io.cucumber:cucumber-junit", version.ref = "cucumber" }
+spring-context = { module = "org.springframework:spring-context", version.ref = "spring" }
+servlet = { module = "jakarta.servlet:jakarta.servlet-api", version.ref = "servlet" }
+servlet-jsp = { module = "jakarta.servlet.jsp:jakarta.servlet.jsp-api", version.ref = "servlet-jsp" }
+servlet-jstl = { module = "jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api", version.ref = "servlet-jsp" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+
+[bundles]
+junit = ["junit-jupiter-engine", "junit-jupiter-api"]
+cucumber = ["cucumber-java8", "cucumber-junit"]
+servlet = ["servlet", "servlet-jsp", "servlet-jstl"]
+tomcat = ["tomcat", "jasper"]

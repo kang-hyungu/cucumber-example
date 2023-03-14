@@ -1,0 +1,3 @@
+rootProject.name = 'cucumber-example'
+
+include 'tomcat:study'
