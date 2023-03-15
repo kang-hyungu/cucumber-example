@@ -3,7 +3,9 @@ package study;
 import io.cucumber.java8.En;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +39,7 @@ public class FileStepDefinitionsWithLambda implements En {
         });
 
         When("resource 디렉터리에서 파일명으로 파일을 찾아서 File 객체로 만들고", () -> {
-            state.file = null;
+            state.file = new File("src/test/resources/" + state.fileName);
             state.actual = state.file.getName();
         });
 
@@ -57,8 +59,8 @@ public class FileStepDefinitionsWithLambda implements En {
         });
 
         When("resource 디렉터리에 있는 파일을 읽어와서", () -> {
-            final Path path = null;
-            state.actual = null;
+            final Path path = Paths.get("src/test/resources/" + state.fileName);
+            state.actual = Files.readAllLines(path);
         });
 
         Then("파일 내용이 {string}이 맞는지 검증한다.", (String expected) -> {

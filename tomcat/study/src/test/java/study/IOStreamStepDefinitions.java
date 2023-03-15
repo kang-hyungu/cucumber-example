@@ -1,14 +1,24 @@
 package study;
 
+import static java.util.Objects.isNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import io.cucumber.docstring.DocString;
 import io.cucumber.java8.En;
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FilterInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class IOStreamStepDefinitions implements En {
 
@@ -43,8 +53,7 @@ public class IOStreamStepDefinitions implements En {
         When("OutputStream 객체의 write 메서드를 사용해서 테스트를 통과시킨다.", () -> {
             final OutputStream outputStream = new ByteArrayOutputStream(state.bytes.length);
 
-            // todo
-            // OutputStream 객체의 write 메서드를 사용해서 테스트를 통과시킨다
+            outputStream.write("nextstep".getBytes());
             state.actual = outputStream.toString();
             outputStream.close();
         });
@@ -64,11 +73,7 @@ public class IOStreamStepDefinitions implements En {
         });
 
         When("OutputStream 객체의 flush 메서드를 호출한다.", () -> {
-            /**
-             * todo
-             * flush를 사용해서 테스트를 통과시킨다.
-             * ByteArrayOutputStream과 어떤 차이가 있을까?
-             */
+            state.outputStream.flush();
         });
 
         Then("flush 메서드가 호출됐는지 검증한다.", () -> {
@@ -86,12 +91,8 @@ public class IOStreamStepDefinitions implements En {
         });
 
         When("try-with-resources를 사용하여 OutputStream이 자동으로 스트림이 닫히도록 하자.", () -> {
-            /**
-             * todo
-             * try-with-resources를 사용한다.
-             * java 9 이상에서는 변수를 try-with-resources로 처리할 수 있다.
-             */
-            final OutputStream 변수 = null;
+            try (final var os = state.outputStream) {
+            }
         });
 
         Then("OutputStream의 close 메서드가 호출됐는지 검증한다.", () -> {
@@ -113,11 +114,7 @@ public class IOStreamStepDefinitions implements En {
         });
 
         When("InputStream의 read 메서드를 사용해서 바이트를 문자열로 변환한다.", () -> {
-            /**
-             * todo
-             * inputStream에서 바이트로 반환한 값을 문자열로 어떻게 바꿀까?
-             */
-            state.actual = "";
+            state.actual = new String(state.inputStream.readAllBytes());
         });
 
         Then("InputStream으로 읽은 데이터가 {string}가 맞는지 검증한다.", (String expected) -> {
@@ -137,12 +134,8 @@ public class IOStreamStepDefinitions implements En {
         });
 
         When("try-with-resources를 사용하여 InputStream이 자동으로 스트림이 닫히도록 하자.", () -> {
-            /**
-             * todo
-             * try-with-resources를 사용한다.
-             * java 9 이상에서는 변수를 try-with-resources로 처리할 수 있다.
-             */
-            final InputStream 변수 = null;
+            try (final var os = state.inputStream) {
+            }
         });
 
         Then("InputStream의 close 메서드가 호출됐는지 검증한다.", () -> {
@@ -161,11 +154,11 @@ public class IOStreamStepDefinitions implements En {
             state.inputStream = new ByteArrayInputStream(given.getBytes());
         });
         And("BufferedInputStream 객체를 생성한다.", () -> {
-            state.bufferedInputStream = null;
+            state.bufferedInputStream = new BufferedInputStream(state.inputStream);
         });
 
         When("BufferedInputStream 객체로 byte 배열을 반환한다.", () -> {
-            state.actual = null;
+            state.actual = state.bufferedInputStream.readAllBytes();
         });
 
         Then("BufferedInputStream 객체가 FilterInputStream 타입이 맞는지 검증하고", () -> {
@@ -189,7 +182,20 @@ public class IOStreamStepDefinitions implements En {
         });
 
         When("BufferedReader 객체를 만들어서 문자열을 한 줄씩 읽는다.", () -> {
-            state.actual = null;
+            state.actual = new StringBuilder();
+
+            try (final var reader = new BufferedReader(new InputStreamReader(state.inputStream))) {
+                while (true) {
+                    final var value = reader.readLine();
+                    if (isNull(value)) {
+                        break;
+                    }
+
+                    state.actual.append(value).append(System.lineSeparator());
+                }
+
+                state.actual.deleteCharAt(state.actual.length() - 1);
+            }
         });
 
         Then("BufferedReader 객체로 읽은 emoji 문자열을 올바르게 읽었는지 검증한다.", () -> {
