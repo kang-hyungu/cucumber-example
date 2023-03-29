@@ -45,6 +45,7 @@ public class IOStreamStepDefinitions implements En {
 
             // todo
             // OutputStream 객체의 write 메서드를 사용해서 테스트를 통과시킨다
+            outputStream.write(state.bytes);
             state.actual = outputStream.toString();
             outputStream.close();
         });
@@ -69,6 +70,7 @@ public class IOStreamStepDefinitions implements En {
              * flush를 사용해서 테스트를 통과시킨다.
              * ByteArrayOutputStream과 어떤 차이가 있을까?
              */
+            state.outputStream.flush();
         });
 
         Then("flush 메서드가 호출됐는지 검증한다.", () -> {
